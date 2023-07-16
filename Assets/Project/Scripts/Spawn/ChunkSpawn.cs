@@ -8,8 +8,8 @@ public class ChunkSpawn : SpawnManager
     public static string blockChunkName = "BlockChunk";
 
     [Header("Setup spawn chunk")]
-        [SerializeField] private int chunksPerRow = 3;
-        [SerializeField] private float chunkSpacing = 4f;
+        [SerializeField] private int chunksPerRow;
+        [SerializeField] private float chunkSpacing;
 
 
     protected override void Awake()
@@ -28,6 +28,18 @@ public class ChunkSpawn : SpawnManager
     protected override void Start()
     {
         SpawnChunks();
+    }
+
+    protected override void LoadComponents()
+    {
+        base.LoadComponents();
+        loadValues();
+    }
+
+    private void loadValues()
+    {
+        chunksPerRow = 3;
+        chunkSpacing = 4;
     }
 
     private void SpawnChunks()
