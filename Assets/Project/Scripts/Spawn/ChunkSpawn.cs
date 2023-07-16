@@ -5,11 +5,11 @@ using UnityEngine;
 public class ChunkSpawn : SpawnManager
 {
     public static ChunkSpawn Instance;
-    public static string ChunkName = "Chunk";
+    public static string blockChunkName = "BlockChunk";
 
     [Header("Setup spawn chunk")]
         [SerializeField] private int chunksPerRow = 3;
-        [SerializeField] private float chunkSpacing = 10f;
+        [SerializeField] private float chunkSpacing = 4f;
 
 
     protected override void Awake()
@@ -37,7 +37,7 @@ public class ChunkSpawn : SpawnManager
             for (int col = 0; col < chunksPerRow; col++)
             {
                 Vector3 spawnPosition = new Vector3(col * chunkSpacing, 0f, row * chunkSpacing);
-                GameObject chunkObject = Spawn(ChunkName, spawnPosition, Quaternion.identity);
+                GameObject chunkObject = Spawn(blockChunkName, spawnPosition, Quaternion.identity);
                 BlockChunkSpawn blockChunkSpawn = chunkObject.GetComponent<BlockChunkSpawn>();
                 blockChunkSpawn.GenerateChunk();
             }
