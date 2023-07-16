@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 9160078628727883090}
   - component: {fileID: 8712716086856094872}
   - component: {fileID: 6681587591335948393}
+  - component: {fileID: -2660205637243015067}
   m_Layer: 0
   m_Name: Dirt
   m_TagString: Untagged
@@ -111,5 +112,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
-  durability: 0
-  timeToBreak: 0
+--- !u!54 &-2660205637243015067
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5659847312583982611}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
