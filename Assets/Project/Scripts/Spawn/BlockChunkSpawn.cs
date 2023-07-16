@@ -34,7 +34,7 @@ public class BlockChunkSpawn : SpawnManager
                 for (int z = 0; z < 4; z++)
                 {
                     BlockType blockType = GetBlockType(y);
-                    Block block = InstantiateBlock(blockType, new Vector3(x, y, z));
+                    Block block = InstantiateBlock(blockType, transform.position + new Vector3(x, y, z));
                     blocks[x, y, z] = block;
                 }
             }

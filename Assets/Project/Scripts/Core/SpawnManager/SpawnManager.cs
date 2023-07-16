@@ -5,7 +5,6 @@ using UnityEngine;
 public class SpawnManager : GameManager
 {
     [SerializeField] protected List<Transform> prefabs;
-    [SerializeField] protected List<GameObject> poolObjs;
     [SerializeField] public Transform holder;
 
     protected override void LoadComponents()
@@ -43,12 +42,6 @@ public class SpawnManager : GameManager
         }
     }
 
-    public virtual void DeSpawn(GameObject obj)
-    {
-        poolObjs.Add(obj);
-        obj.SetActive(false);
-    }
-
     public virtual GameObject Spawn(string prefabName, Vector3 position, Quaternion rotation)
     {
         GameObject prefab = GetPrefabByName(prefabName).gameObject;
@@ -57,28 +50,11 @@ public class SpawnManager : GameManager
             return null;
         }
 
-        GameObject newPrefab = GetObjectFromPool(prefab);
+        GameObject newPrefab = Instantiate(prefab);
         newPrefab.transform.SetPositionAndRotation(position, rotation);
         newPrefab.transform.SetParent(holder.transform);
         newPrefab.SetActive(true);
         
-        return newPrefab;
-    }
-
-    protected virtual GameObject GetObjectFromPool(GameObject prefab)
-    {
-        foreach(GameObject poolObject in this.poolObjs)
-        {
-            if(poolObject.name == prefab.name)
-            {
-                this.poolObjs.Remove(poolObject);
-                return poolObject;
-            }
-        }
-
-        GameObject newPrefab = Instantiate(prefab);
-        newPrefab.name = prefab.name;
-
         return newPrefab;
     }
 
