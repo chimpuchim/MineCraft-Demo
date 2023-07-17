@@ -9,10 +9,12 @@ public class PlaceBlock : SpawnManager
     private int selectedBlockType;
     private float selectedBlockTimeBreak;
     private Transform selectedBlockHolder;
+    private GameObject holderPlaceBlocks;
 
 
     protected override void Start()
     {
+        holderPlaceBlocks = new GameObject("Holder");
         mainCamera = GameController.Instance.CameraMain.gameObject.GetComponent<Camera>();
     }
 
@@ -47,6 +49,7 @@ public class PlaceBlock : SpawnManager
 
         GameObject newPrefab = Instantiate(prefab);
         newPrefab.transform.SetPositionAndRotation(position, rotation);
+        newPrefab.transform.SetParent(holderPlaceBlocks.transform);
         newPrefab.SetActive(true);
         
         return newPrefab;
