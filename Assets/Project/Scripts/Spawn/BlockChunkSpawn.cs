@@ -54,23 +54,29 @@ public class BlockChunkSpawn : SpawnManager
     private Block InstantiateBlock(BlockType blockType, Vector3 position)
     {
         string blockPrefabName;
+        float timeBreak;
         switch (blockType)
         {
             case BlockType.Grass:
                 blockPrefabName = grassBlockName;
+                timeBreak = 1;
                 break;
             case BlockType.Dirt:
                 blockPrefabName = dirtBlockName;
+                timeBreak = 2;
                 break;
             case BlockType.Stone:
                 blockPrefabName = stoneBlockName;
+                timeBreak = 3;
                 break;
             default:
                 blockPrefabName = null;
+                timeBreak = 0;
                 break;
         }
         
         Block block = Spawn(blockPrefabName, position, Quaternion.identity).GetComponent<Block>();
+        block.TimeBreakBlock = timeBreak;
         return block;
     }
 
