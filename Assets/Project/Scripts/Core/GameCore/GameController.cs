@@ -9,8 +9,8 @@ public class GameController : GameManager
     [SerializeField] private Transform cameraMain;
     public Transform CameraMain { get => cameraMain; set => cameraMain = value; }
 
-    // [SerializeField] private Transform player;
-    // public Transform Player { get => player; set => player = value; }
+    [SerializeField] private Transform player;
+    public Transform Player { get => player; set => player = value; }
 
 
     protected override void Awake()
@@ -33,7 +33,7 @@ public class GameController : GameManager
 
     private void loadPrefabs()
     {
-        // player = GameObject.FindGameObjectWithTag("Player").transform;
+        player = GameObject.FindGameObjectWithTag("Player").transform;
         cameraMain = GameObject.FindGameObjectWithTag("MainCamera").transform;
     }
 }
