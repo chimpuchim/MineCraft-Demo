@@ -37,20 +37,27 @@ public class PlaceBlock : SpawnManager
         }
     }
 
-    public override GameObject Spawn(string prefabName, Vector3 position, Quaternion rotation)
+    private void PlaceBlocks()
     {
-        GameObject prefab = GetPrefabByName(prefabName).gameObject;
-        if(prefab == null)
-        {
-            return null;
-        }
+        RaycastHit hit;
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
-        GameObject newPrefab = Instantiate(prefab);
-        newPrefab.transform.SetPositionAndRotation(position, rotation);
-        newPrefab.transform.SetParent(holder.transform);
-        newPrefab.SetActive(true);
-        
-        return newPrefab;
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        {
+            Vector3 targetPosition = hit.point;
+            targetPosition.y = Mathf.Round(targetPosition.y);
+
+            if (CanPlaceBlock(targetPosition))
+            {
+                GameObject blockObject = Spawn(selectedBlockName, new Vector3(targetPosition.x, targetPosition.y - 1f, targetPosition.z), Quaternion.identity);
+                Block block = blockObject.GetComponent<Block>();
+                block.Type = (BlockType)selectedBlockType;
+                block.TimeBreakBlock = selectedBlockTimeBreak;
+
+                Vector3 blockOffset = Vector3.Scale(hit.normal, blockObject.transform.localScale);
+                blockObject.transform.position += blockOffset;
+            }
+        }
     }
 
     private bool CanPlaceBlock(Vector3 position)
