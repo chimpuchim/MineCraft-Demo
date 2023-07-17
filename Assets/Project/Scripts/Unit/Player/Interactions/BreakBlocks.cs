@@ -5,6 +5,7 @@ using UnityEngine;
 public class BreakBlocks : GameManager
 {
     private Camera mainCamera;
+    private bool isBreakingBlock;
 
 
     protected override void Start()
@@ -16,31 +17,44 @@ public class BreakBlocks : GameManager
     {
         if (Input.GetMouseButtonDown(0))
         {
-            BreakBlock();
+            isBreakingBlock = true;
+            StartCoroutine(BreakBlockCoroutine());
         }
-    }
-
-    private void BreakBlock()
-    {
-        RaycastHit hit;
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        else if (Input.GetMouseButtonUp(0))
         {
-            Block block = hit.collider.GetComponent<Block>();
-
-            if (block != null)
-            {
-                StartCoroutine(BreakBlockCoroutine(block, block.TimeBreakBlock));
-            }
+            isBreakingBlock = false;
         }
     }
 
-    private IEnumerator BreakBlockCoroutine(Block block, float breakTime)
+    
+    private IEnumerator BreakBlockCoroutine()
     {
-        yield return new WaitForSeconds(breakTime);
+        float startTime = Time.time;
 
-        block.gameObject.SetActive(false);
-        Destroy(block.gameObject);
+        while (isBreakingBlock)
+        {
+            RaycastHit hit;
+            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+            {
+                Block block = hit.collider.GetComponent<Block>();
+
+                if (block != null)
+                {
+                    float breakTime = block.TimeBreakBlock;
+                    float elapsedTime = Time.time - startTime;
+
+                    if (elapsedTime >= breakTime)
+                    {
+                        block.gameObject.SetActive(false);
+                        Destroy(block.gameObject);
+                        startTime = Time.time;
+                    }
+                }
+            }
+
+            yield return null;
+        }
     }
 }
