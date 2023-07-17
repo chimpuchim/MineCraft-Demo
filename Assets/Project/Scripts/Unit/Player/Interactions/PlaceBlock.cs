@@ -37,6 +37,21 @@ public class PlaceBlock : SpawnManager
         }
     }
 
+    public override GameObject Spawn(string prefabName, Vector3 position, Quaternion rotation)
+    {
+        GameObject prefab = GetPrefabByName(prefabName).gameObject;
+        if(prefab == null)
+        {
+            return null;
+        }
+
+        GameObject newPrefab = Instantiate(prefab);
+        newPrefab.transform.SetPositionAndRotation(position, rotation);
+        newPrefab.SetActive(true);
+        
+        return newPrefab;
+    }
+
     private void PlaceBlocks()
     {
         RaycastHit hit;
@@ -44,33 +59,14 @@ public class PlaceBlock : SpawnManager
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
-            Vector3 targetPosition = hit.point;
-            targetPosition.y = Mathf.Round(targetPosition.y);
-
-            if (CanPlaceBlock(targetPosition))
+            if(hit.transform.tag == "Block")
             {
-                GameObject blockObject = Spawn(selectedBlockName, new Vector3(targetPosition.x, targetPosition.y - 1f, targetPosition.z), Quaternion.identity);
-                Block block = blockObject.GetComponent<Block>();
-                block.Type = (BlockType)selectedBlockType;
+                Vector3 spawnPos = new Vector3(Mathf.RoundToInt(hit.point.x + hit.normal.x / 2), Mathf.RoundToInt(hit.point.y + hit.normal.y / 2),Mathf.RoundToInt(hit.point.z + hit.normal.z / 2));
+                Block block = Spawn(selectedBlockName, spawnPos, Quaternion.identity).GetComponent<Block>();
                 block.TimeBreakBlock = selectedBlockTimeBreak;
-
-                Vector3 blockOffset = Vector3.Scale(hit.normal, blockObject.transform.localScale);
-                blockObject.transform.position += blockOffset;
+                block.Type = (BlockType)selectedBlockType;
             }
         }
-    }
-
-    private bool CanPlaceBlock(Vector3 position)
-    {
-        Collider[] colliders = Physics.OverlapBox(position, Vector3.one * 0.4f);
-        foreach (Collider collider in colliders)
-        {
-            if (collider.CompareTag("Block"))
-            {
-                return false;
-            }
-        }
-        return true;
     }
 
     private void SelectBlock(int blockIndex)
